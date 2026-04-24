@@ -1,0 +1,28 @@
+# 컴파일러 설정
+CC = gcc
+CFLAGS = -Wall -O2 -I.
+
+# 실행 파일 이름 (윈도우는 .exe가 자동으로 붙거나 명시해야 함)
+TARGET = editor
+
+# 운영체제 감지 (Windows_NT는 윈도우 환경 변수임)
+ifeq ($(OS), Windows_NT)
+    RM = del /Q
+    EXT = .exe
+else
+    RM = rm -f
+    EXT = 
+endif
+
+# 빌드 규칙
+all: $(TARGET)$(EXT)
+
+$(TARGET)$(EXT): main.o
+	$(CC) $(CFLAGS) -o $(TARGET)$(EXT) main.o
+
+main.o: main.c terminal.h
+	$(CC) $(CFLAGS) -c main.c
+
+# 정리 규칙 (컴파일 결과물 삭제)
+clean:
+	$(RM) *.o $(TARGET)$(EXT)
